@@ -138,6 +138,7 @@ def stHarmonic(frame, fs):
     if M > len(R):
         M = len(R) - 1
 
+    M = int(M)
     Gamma = numpy.zeros((M), dtype=numpy.float64)
     CSum = numpy.cumsum(frame ** 2)
     Gamma[m0:M] = R[m0:M] / (numpy.sqrt((g * CSum[M:m0:-1])) + eps)
@@ -675,14 +676,14 @@ def stFeatureSpeed(signal, fs, win, step):
     nlogfil = 27
     n_mfcc_feats = 13
     nfil = nlinfil + nlogfil
-    nfft = win / 2
+    nfft = int(win / 2)
     if fs < 8000:
         nlogfil = 5
         nfil = nlinfil + nlogfil
-        nfft = win / 2
+        nfft = int(win / 2)
 
     # compute filter banks for mfcc:
-    [fbank, freqs] = mfccInitFilterBanks(fs, nfft, lowfreq, linsc, logsc, nlinfil, nlogfil)
+    [fbank, freqs] = mfccInitFilterBanks(fs, nfft)
 
     n_time_spectral_feats = 8
     n_harmonic_feats = 1
@@ -692,10 +693,10 @@ def stFeatureSpeed(signal, fs, win, step):
 
     while (cur_p + win - 1 < N):
         count_fr += 1
-        x = signal[cur_p:cur_p + win]
+        x = signal[int(cur_p):int(cur_p + win)]
         cur_p = cur_p + step
         X = abs(fft(x))
-        X = X[0:nfft]
+        X = X[0:int(nfft)]
         X = X / len(X)
         Ex = 0.0
         El = 0.0
